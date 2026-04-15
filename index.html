@@ -535,7 +535,7 @@
 <!-- Hero -->
 <div class="hero animate-in delay-1">
   <div class="hero-amount">
-    <span class="currency">$</span><span id="heroAmount">253,222</span>
+    <span class="currency">$</span><span id="heroAmount">253,902</span>
   </div>
   <div class="hero-target">
     of <span>$450,000</span> target
@@ -614,7 +614,7 @@
         </div>
       </div>
       <div>
-        <div class="q-current" id="q2Current">$14,568</div>
+        <div class="q-current" id="q2Current">$15,248</div>
         <div class="q-target">of $70,000 target</div>
       </div>
     </div>
@@ -734,6 +734,27 @@
     document.getElementById('nextMilestoneGap').textContent = '$' + toNextMilestone.toLocaleString();
   }
 
+  
+  // Dynamic Q2 and hero values
+  document.getElementById('q2Current').textContent = '
+  const q2RingEl = document.getElementById('q2RingFill');
+  if (q2RingEl) {
+    const q2Circ = 2 * Math.PI * 25;
+    const q2Pct = Math.min(100, (CONFIG.q2New / 70000) * 100);
+    const q2Offset = q2Circ - (q2Pct / 100) * q2Circ;
+    q2RingEl.style.strokeDashoffset = q2Circ;
+    setTimeout(() => { q2RingEl.style.strokeDashoffset = q2Offset; }, 500);
+    document.getElementById('q2RingPct').textContent = Math.round(q2Pct);
+  }
+
+  // Footer date
+  document.getElementById('footerDate').textContent = CONFIG.lastUpdated;
+</script>
+
+</body>
+</html>
+ + CONFIG.q2New.toLocaleString();
+  document.getElementById('heroAmount').textContent = CONFIG.totalLocked.toLocaleString();
   // Q2 ring animation
   const q2RingEl = document.getElementById('q2RingFill');
   if (q2RingEl) {
