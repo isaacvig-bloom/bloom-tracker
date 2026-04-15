@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Bloom OS &#8212; Quarter Tracker</title>
+<title>Bloom OS  &#8212;Quarter Tracker</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -316,13 +316,12 @@
     font-size: 12px;
   }
 
-  
   /* Q2 mini progress ring */
   .q-ring-wrap { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
   .q-ring-container { position: relative; width: 60px; height: 60px; flex-shrink: 0; }
   .q-ring-svg { width: 60px; height: 60px; transform: rotate(-90deg); }
   .q-ring-bg { fill: none; stroke: rgba(255,255,255,0.06); stroke-width: 5; }
-  .q-ring-fill { fill: none; stroke: url(#goldGradient); stroke-width: 5; stroke-linecap: round; transition: stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1); }
+  .q-ring-fill-active { fill: none; stroke: url(#goldGradient); stroke-width: 5; stroke-linecap: round; transition: stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1); }
   .q-ring-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
   .q-ring-pct { font-size: 16px; font-weight: 900; color: var(--gold); line-height: 1; }
   .q-ring-pct-sign { font-size: 8px; font-weight: 700; color: rgba(204, 138, 42, 0.6); }
@@ -466,35 +465,35 @@
     quarters: [
       {
         label: 'Q1',
-        subtitle: 'Jan &#8212; Mar',
+        subtitle: 'Jan  &#8212;Mar',
         target: 238654,
         get current() { return CONFIG.q1Baseline; },
         status: 'complete'
       },
       {
         label: 'Q2',
-        subtitle: 'Apr &#8212; Jun',
+        subtitle: 'Apr  &#8212;Jun',
         target: 70000,
         get current() { return CONFIG.q2New; },
         status: 'active'
       },
       {
         label: 'Q3',
-        subtitle: 'Jul &#8212; Sep',
+        subtitle: 'Jul  &#8212;Sep',
         target: 70000,
         get current() { return CONFIG.q3New; },
         status: 'locked'
       },
       {
         label: 'Q4',
-        subtitle: 'Oct &#8212; Dec',
+        subtitle: 'Oct  &#8212;Dec',
         target: 71346,          // $450k - $238,654 - $70k - $70k
         get current() { return CONFIG.q4New; },
         status: 'locked'
       }
     ],
 
-    // Milestones &#8212; hit these cumulative totals to "unlock"
+    // Milestones  &#8212;hit these cumulative totals to "unlock"
     milestones: [
       { amount: 275000, label: '$275k', icon: '&#128293;', reward: 'On pace' },
       { amount: 300000, label: '$300k', icon: '&#9889;', reward: '2/3 mark' },
@@ -587,7 +586,7 @@
   <div class="momentum-text">
     <div class="momentum-title" id="momentumTitle">4-month booking streak</div>
     <div class="momentum-sub" id="momentumSub">
-      Next milestone: <strong id="nextMilestoneLabel">$275k</strong> &#8212; <strong id="nextMilestoneGap">$21,778</strong> away
+      Next milestone: <strong id="nextMilestoneLabel">$275k</strong>  &#8212;<strong id="nextMilestoneGap">$21,778</strong> away
     </div>
   </div>
 </div>
@@ -600,7 +599,7 @@
     <div class="q-head">
       <div>
         <span class="q-label complete">Q1</span>
-        <span style="font-size: 10px; color: var(--text-muted); margin-left: 8px; font-weight: 500;">Jan &#8212; Mar</span>
+        <span style="font-size: 10px; color: var(--text-muted); margin-left: 8px; font-weight: 500;">Jan  &#8212;Mar</span>
       </div>
       <span class="q-status complete">&#10003; Complete</span>
     </div>
@@ -622,7 +621,7 @@
     <div class="q-head">
       <div>
         <span class="q-label active">Q2</span>
-        <span style="font-size: 10px; color: var(--text-muted); margin-left: 8px; font-weight: 500;">Apr &#8212; Jun</span>
+        <span style="font-size: 10px; color: var(--text-muted); margin-left: 8px; font-weight: 500;">Apr  &#8212;Jun</span>
       </div>
       <span class="q-status active">In Progress</span>
     </div>
@@ -630,7 +629,7 @@
       <div class="q-ring-container">
         <svg class="q-ring-svg" viewBox="0 0 60 60">
           <circle class="q-ring-bg" cx="30" cy="30" r="25"/>
-          <circle class="q-ring-fill" cx="30" cy="30" r="25" stroke-dasharray="157.08" id="q2RingFill"/>
+          <circle class="q-ring-fill-active" cx="30" cy="30" r="25" stroke-dasharray="157.08" id="q2RingFill"/>
         </svg>
         <div class="q-ring-center">
           <div class="q-ring-pct"><span id="q2RingPct">21</span><span class="q-ring-pct-sign">%</span></div>
@@ -648,9 +647,9 @@
       <div class="milestone earned"><span class="milestone-icon">&#10003;</span> Ellen & Alex booked</div>
       <div class="milestone earned"><span class="milestone-icon">&#10003;</span> Katie & Flacky booked</div>
       <div class="milestone earned"><span class="milestone-icon">&#10003;</span> TIGS confirmed</div>
-      <div class="milestone next"><span class="milestone-icon">&#9678;</span> $20k &#8212; Quick start</div>
-      <div class="milestone future"><span class="milestone-icon">&#9675;</span> $40k &#8212; Halfway</div>
-      <div class="milestone future"><span class="milestone-icon">&#9675;</span> $70k &#8212; Quarter crushed</div>
+      <div class="milestone next"><span class="milestone-icon">&#9678;</span> $20k  &#8212;Quick start</div>
+      <div class="milestone future"><span class="milestone-icon">&#9675;</span> $40k  &#8212;Halfway</div>
+      <div class="milestone future"><span class="milestone-icon">&#9675;</span> $70k  &#8212;Quarter crushed</div>
     </div>
   </div>
 
@@ -659,13 +658,13 @@
     <div class="q-head">
       <div>
         <span class="q-label locked">Q3</span>
-        <span style="font-size: 10px; color: var(--text-muted); margin-left: 8px; font-weight: 500;">Jul &#8212; Sep</span>
+        <span style="font-size: 10px; color: var(--text-muted); margin-left: 8px; font-weight: 500;">Jul  &#8212;Sep</span>
       </div>
       <span class="q-status locked">Locked</span>
     </div>
     <div class="q-numbers">
       <div class="q-current" style="color: var(--text-muted);">$0</div>
-      <div class="q-target">$70,000 target &#8212; winter quarter</div>
+      <div class="q-target">$70,000 target  &#8212;winter quarter</div>
     </div>
     <div class="q-bar-track">
       <div class="q-bar-fill" style="width: 0%; background: var(--text-muted);"></div>
@@ -677,13 +676,13 @@
     <div class="q-head">
       <div>
         <span class="q-label locked">Q4</span>
-        <span style="font-size: 10px; color: var(--text-muted); margin-left: 8px; font-weight: 500;">Oct &#8212; Dec</span>
+        <span style="font-size: 10px; color: var(--text-muted); margin-left: 8px; font-weight: 500;">Oct  &#8212;Dec</span>
       </div>
       <span class="q-status locked">Locked</span>
     </div>
     <div class="q-numbers">
       <div class="q-current" style="color: var(--text-muted);">$0</div>
-      <div class="q-target">$71,346 target &#8212; finish line</div>
+      <div class="q-target">$71,346 target  &#8212;finish line</div>
     </div>
     <div class="q-bar-track">
       <div class="q-bar-fill" style="width: 0%; background: var(--text-muted);"></div>
@@ -778,7 +777,6 @@
     milestoneListEl.appendChild(row);
   });
 
-  
   // Q2 ring animation
   const q2RingEl = document.getElementById('q2RingFill');
   if (q2RingEl) {
