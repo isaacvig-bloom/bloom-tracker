@@ -1,1 +1,764 @@
-# bloom-tracker
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Bloom OS — Quarter Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #CC8A2A;
+    --gold-glow: rgba(204, 138, 42, 0.25);
+    --gold-dim: rgba(204, 138, 42, 0.12);
+    --bg: #0a0908;
+    --card: #121110;
+    --card-border: #1e1a14;
+    --text: #e8e0d0;
+    --text-muted: #6a6050;
+    --green: #4ade80;
+    --green-glow: rgba(74, 222, 128, 0.15);
+    --green-dim: rgba(74, 222, 128, 0.06);
+    --orange: #fb923c;
+    --locked: #3b82f6;
+    --locked-glow: rgba(59, 130, 246, 0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Montserrat', sans-serif;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    padding: 28px 20px 12px;
+  }
+
+  .header-brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+
+  .header-sub {
+    font-size: 9px;
+    color: var(--text-muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  /* Year target hero */
+  .hero {
+    text-align: center;
+    padding: 20px 20px 24px;
+  }
+
+  .hero-amount {
+    font-size: 52px;
+    font-weight: 900;
+    letter-spacing: -2px;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  .hero-amount .currency {
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--gold);
+    vertical-align: top;
+    line-height: 1.6;
+  }
+
+  .hero-target {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 6px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+
+  .hero-target span { color: var(--gold); font-weight: 700; }
+
+  /* Main progress ring */
+  .ring-wrap {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0 20px;
+  }
+
+  .ring-container {
+    position: relative;
+    width: 200px;
+    height: 200px;
+  }
+
+  .ring-svg {
+    width: 200px;
+    height: 200px;
+    transform: rotate(-90deg);
+  }
+
+  .ring-bg {
+    fill: none;
+    stroke: var(--card-border);
+    stroke-width: 10;
+  }
+
+  .ring-fill {
+    fill: none;
+    stroke: url(#goldGradient);
+    stroke-width: 10;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .ring-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  .ring-pct {
+    font-size: 42px;
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1;
+    letter-spacing: -1px;
+  }
+
+  .ring-pct-sign {
+    font-size: 20px;
+    font-weight: 700;
+    color: rgba(204, 138, 42, 0.6);
+  }
+
+  .ring-label {
+    font-size: 9px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 600;
+    margin-top: 4px;
+  }
+
+  /* Quarter cards */
+  .quarters {
+    padding: 0 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .q-card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 16px 18px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .q-card.active {
+    border-color: var(--gold);
+    box-shadow: 0 0 20px var(--gold-glow), inset 0 0 30px var(--gold-dim);
+  }
+
+  .q-card.complete {
+    border-color: var(--green);
+    box-shadow: 0 0 15px var(--green-glow);
+  }
+
+  .q-card.locked {
+    opacity: 0.45;
+  }
+
+  .q-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .q-label {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .q-label.active { color: var(--gold); }
+  .q-label.complete { color: var(--green); }
+  .q-label.locked { color: var(--text-muted); }
+
+  .q-status {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+
+  .q-status.active {
+    background: var(--gold-dim);
+    color: var(--gold);
+  }
+
+  .q-status.complete {
+    background: var(--green-dim);
+    color: var(--green);
+  }
+
+  .q-status.locked {
+    background: rgba(255,255,255,0.04);
+    color: var(--text-muted);
+  }
+
+  .q-numbers {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+  }
+
+  .q-current {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -0.5px;
+  }
+
+  .q-card.active .q-current { color: var(--gold); }
+  .q-card.complete .q-current { color: var(--green); }
+
+  .q-target {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .q-bar-track {
+    width: 100%;
+    height: 6px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+
+  .q-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .q-bar-fill.active {
+    background: linear-gradient(90deg, var(--gold), #E0A83C);
+  }
+
+  .q-bar-fill.complete {
+    background: linear-gradient(90deg, #22c55e, var(--green));
+  }
+
+  /* Milestones inside quarter */
+  .q-milestones {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .milestone {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+  }
+
+  .milestone.earned {
+    background: var(--green-dim);
+    color: var(--green);
+    border: 1px solid rgba(74, 222, 128, 0.2);
+  }
+
+  .milestone.next {
+    background: var(--gold-dim);
+    color: var(--gold);
+    border: 1px solid rgba(204, 138, 42, 0.2);
+  }
+
+  .milestone.future {
+    background: rgba(255,255,255,0.03);
+    color: var(--text-muted);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .milestone-icon {
+    font-size: 12px;
+  }
+
+  /* Stats strip */
+  .stats-strip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--card-border);
+    margin: 20px 16px 0;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .stat-cell {
+    background: var(--card);
+    padding: 14px 12px;
+    text-align: center;
+  }
+
+  .stat-cell:first-child { border-radius: 10px 0 0 10px; }
+  .stat-cell:last-child { border-radius: 0 10px 10px 0; }
+
+  .stat-val {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--gold);
+    letter-spacing: -0.5px;
+  }
+
+  .stat-val.urgent { color: var(--orange); }
+
+  .stat-lbl {
+    font-size: 8px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+    margin-top: 3px;
+  }
+
+  /* Streak / momentum */
+  .momentum {
+    margin: 16px 16px 0;
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .momentum-flame {
+    font-size: 28px;
+    line-height: 1;
+  }
+
+  .momentum-text {
+    flex: 1;
+  }
+
+  .momentum-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+
+  .momentum-sub {
+    font-size: 10px;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 20px 20px 28px;
+    margin-top: auto;
+  }
+
+  .footer-updated {
+    font-size: 9px;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    font-weight: 500;
+  }
+
+  /* Pulse animation for active quarter */
+  @keyframes pulse-gold {
+    0%, 100% { box-shadow: 0 0 20px var(--gold-glow), inset 0 0 30px var(--gold-dim); }
+    50% { box-shadow: 0 0 30px rgba(204, 138, 42, 0.35), inset 0 0 40px rgba(204, 138, 42, 0.15); }
+  }
+
+  .q-card.active {
+    animation: pulse-gold 3s ease-in-out infinite;
+  }
+
+  /* Number count-up animation */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate-in {
+    animation: fadeInUp 0.6s ease-out forwards;
+  }
+
+  .delay-1 { animation-delay: 0.1s; opacity: 0; }
+  .delay-2 { animation-delay: 0.2s; opacity: 0; }
+  .delay-3 { animation-delay: 0.3s; opacity: 0; }
+  .delay-4 { animation-delay: 0.4s; opacity: 0; }
+  .delay-5 { animation-delay: 0.5s; opacity: 0; }
+</style>
+</head>
+<body>
+
+<div class="header animate-in">
+  <div class="header-brand">Bloom OS</div>
+  <div class="header-sub">2026 Revenue Tracker</div>
+</div>
+
+<!-- ============================== -->
+<!-- DATA CONFIG - UPDATE THIS ONLY -->
+<!-- ============================== -->
+<script>
+  // ============================================
+  // UPDATE THESE NUMBERS WHEN REVENUE CHANGES
+  // ============================================
+  const CONFIG = {
+    yearTarget: 450000,
+    q1Baseline: 238654,      // Everything locked before 1 April
+    q2New: 14568,            // New revenue added in Q2: Ellen & Alex $5,218 + Katie deposit $1,650 + TIGS $7,700
+    q3New: 0,
+    q4New: 0,
+    get totalLocked() { return this.q1Baseline + this.q2New + this.q3New + this.q4New; },
+
+    // Quarter targets ($70k each for Q2-Q4)
+    quarters: [
+      {
+        label: 'Q1',
+        subtitle: 'Jan — Mar',
+        target: 238654,
+        get current() { return CONFIG.q1Baseline; },
+        status: 'complete'
+      },
+      {
+        label: 'Q2',
+        subtitle: 'Apr — Jun',
+        target: 70000,
+        get current() { return CONFIG.q2New; },
+        status: 'active'
+      },
+      {
+        label: 'Q3',
+        subtitle: 'Jul — Sep',
+        target: 70000,
+        get current() { return CONFIG.q3New; },
+        status: 'locked'
+      },
+      {
+        label: 'Q4',
+        subtitle: 'Oct — Dec',
+        target: 71346,          // $450k - $238,654 - $70k - $70k
+        get current() { return CONFIG.q4New; },
+        status: 'locked'
+      }
+    ],
+
+    // Milestones — hit these cumulative totals to "unlock"
+    milestones: [
+      { amount: 275000, label: '$275k', icon: '🔥', reward: 'On pace' },
+      { amount: 300000, label: '$300k', icon: '⚡', reward: '2/3 mark' },
+      { amount: 350000, label: '$350k', icon: '🏔', reward: 'Matched 2025' },
+      { amount: 400000, label: '$400k', icon: '🚀', reward: 'New record' },
+      { amount: 425000, label: '$425k', icon: '👑', reward: 'Almost there' },
+      { amount: 450000, label: '$450k', icon: '🏆', reward: 'TARGET HIT' },
+    ],
+
+    bookingStreak: 4,
+    lastUpdated: '15 April 2026'
+  };
+
+  // ============================================
+  // CALCULATIONS (don't edit below)
+  // ============================================
+  const pct = Math.min(100, (CONFIG.totalLocked / CONFIG.yearTarget) * 100);
+  const remaining = CONFIG.yearTarget - CONFIG.totalLocked;
+
+  // Days left in year
+  const now = new Date();
+  const endOfYear = new Date(2026, 11, 31);
+  const daysLeft = Math.ceil((endOfYear - now) / (1000 * 60 * 60 * 24));
+
+  // Per day/week needed
+  const perDay = remaining > 0 ? Math.ceil(remaining / daysLeft) : 0;
+  const perWeek = remaining > 0 ? Math.ceil(remaining / (daysLeft / 7)) : 0;
+
+  // Active quarter
+  const activeQ = CONFIG.quarters.find(q => q.status === 'active');
+  const activeQPct = activeQ ? Math.min(100, (activeQ.current / activeQ.target) * 100) : 0;
+
+  // Milestones earned
+  const milestonesEarned = CONFIG.milestones.filter(m => CONFIG.totalLocked >= m.amount).length;
+  const nextMilestone = CONFIG.milestones.find(m => CONFIG.totalLocked < m.amount);
+  const toNextMilestone = nextMilestone ? nextMilestone.amount - CONFIG.totalLocked : 0;
+</script>
+
+<!-- Hero -->
+<div class="hero animate-in delay-1">
+  <div class="hero-amount">
+    <span class="currency">$</span><span id="heroAmount">253,222</span>
+  </div>
+  <div class="hero-target">
+    of <span>$450,000</span> target
+  </div>
+</div>
+
+<!-- Ring -->
+<div class="ring-wrap animate-in delay-2">
+  <div class="ring-container">
+    <svg class="ring-svg" viewBox="0 0 200 200">
+      <defs>
+        <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#8a5a10"/>
+          <stop offset="100%" stop-color="#E0A83C"/>
+        </linearGradient>
+      </defs>
+      <circle class="ring-bg" cx="100" cy="100" r="85"/>
+      <circle class="ring-fill" cx="100" cy="100" r="85"
+        stroke-dasharray="534.07"
+        id="ringFill"/>
+    </svg>
+    <div class="ring-center">
+      <div class="ring-pct"><span id="ringPct">0</span><span class="ring-pct-sign">%</span></div>
+      <div class="ring-label">of annual goal</div>
+    </div>
+  </div>
+</div>
+
+<!-- Stats strip -->
+<div class="stats-strip animate-in delay-3">
+  <div class="stat-cell">
+    <div class="stat-val" id="statRemaining">$197k</div>
+    <div class="stat-lbl">Still Needed</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-val" id="statPerWeek">$7.2k</div>
+    <div class="stat-lbl">Per Week Pace</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-val" id="statDaysLeft">260</div>
+    <div class="stat-lbl">Days Left</div>
+  </div>
+</div>
+
+<!-- Momentum -->
+<div class="momentum animate-in delay-3">
+  <div class="momentum-flame" id="momentumIcon">🔥</div>
+  <div class="momentum-text">
+    <div class="momentum-title" id="momentumTitle">4-month booking streak</div>
+    <div class="momentum-sub" id="momentumSub">
+      Next milestone: <strong id="nextMilestoneLabel">$275k</strong> — <strong id="nextMilestoneGap">$21,778</strong> away
+    </div>
+  </div>
+</div>
+
+<!-- Quarter cards -->
+<div class="quarters" style="margin-top: 16px;">
+
+  <!-- Q1 -->
+  <div class="q-card complete animate-in delay-4">
+    <div class="q-head">
+      <div>
+        <span class="q-label complete">Q1</span>
+        <span style="font-size: 10px; color: var(--text-muted); margin-left: 8px; font-weight: 500;">Jan — Mar</span>
+      </div>
+      <span class="q-status complete">✓ Complete</span>
+    </div>
+    <div class="q-numbers">
+      <div class="q-current">$238,654</div>
+      <div class="q-target">baseline locked before April</div>
+    </div>
+    <div class="q-bar-track">
+      <div class="q-bar-fill complete" style="width: 100%"></div>
+    </div>
+    <div class="q-milestones">
+      <div class="milestone earned"><span class="milestone-icon">✓</span> Foundation set</div>
+      <div class="milestone earned"><span class="milestone-icon">✓</span> 37 weddings booked</div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-card active animate-in delay-4">
+    <div class="q-head">
+      <div>
+        <span class="q-label active">Q2</span>
+        <span style="font-size: 10px; color: var(--text-muted); margin-left: 8px; font-weight: 500;">Apr — Jun</span>
+      </div>
+      <span class="q-status active">In Progress</span>
+    </div>
+    <div class="q-numbers">
+      <div class="q-current" id="q2Current">$14,568</div>
+      <div class="q-target">of $70,000 target</div>
+    </div>
+    <div class="q-bar-track">
+      <div class="q-bar-fill active" style="width: 20.8%" id="q2Bar"></div>
+    </div>
+    <div class="q-milestones">
+      <div class="milestone earned"><span class="milestone-icon">✓</span> Ellen & Alex booked</div>
+      <div class="milestone earned"><span class="milestone-icon">✓</span> Katie & Flacky booked</div>
+      <div class="milestone earned"><span class="milestone-icon">✓</span> TIGS confirmed</div>
+      <div class="milestone next"><span class="milestone-icon">◎</span> $20k — Quick start</div>
+      <div class="milestone future"><span class="milestone-icon">○</span> $40k — Halfway</div>
+      <div class="milestone future"><span class="milestone-icon">○</span> $70k — Quarter crushed</div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-card locked animate-in delay-5">
+    <div class="q-head">
+      <div>
+        <span class="q-label locked">Q3</span>
+        <span style="font-size: 10px; color: var(--text-muted); margin-left: 8px; font-weight: 500;">Jul — Sep</span>
+      </div>
+      <span class="q-status locked">Locked</span>
+    </div>
+    <div class="q-numbers">
+      <div class="q-current" style="color: var(--text-muted);">$0</div>
+      <div class="q-target">$70,000 target — winter quarter</div>
+    </div>
+    <div class="q-bar-track">
+      <div class="q-bar-fill" style="width: 0%; background: var(--text-muted);"></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-card locked animate-in delay-5">
+    <div class="q-head">
+      <div>
+        <span class="q-label locked">Q4</span>
+        <span style="font-size: 10px; color: var(--text-muted); margin-left: 8px; font-weight: 500;">Oct — Dec</span>
+      </div>
+      <span class="q-status locked">Locked</span>
+    </div>
+    <div class="q-numbers">
+      <div class="q-current" style="color: var(--text-muted);">$0</div>
+      <div class="q-target">$71,346 target — finish line</div>
+    </div>
+    <div class="q-bar-track">
+      <div class="q-bar-fill" style="width: 0%; background: var(--text-muted);"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Annual milestones -->
+<div style="margin: 20px 16px 0;">
+  <div style="background: var(--card); border: 1px solid var(--card-border); border-radius: 12px; padding: 16px 18px;">
+    <div style="font-size: 9px; color: var(--gold); font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 14px;">Annual Milestones</div>
+    <div style="display: flex; flex-direction: column; gap: 8px;" id="milestoneList">
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="footer-updated">Last updated: <span id="footerDate">15 April 2026</span></div>
+</div>
+
+<script>
+  // Animate ring
+  const circumference = 2 * Math.PI * 85; // 534.07
+  const ringEl = document.getElementById('ringFill');
+  const offset = circumference - (pct / 100) * circumference;
+
+  // Start empty, animate to current
+  ringEl.style.strokeDashoffset = circumference;
+  setTimeout(() => {
+    ringEl.style.strokeDashoffset = offset;
+  }, 300);
+
+  // Animate percentage counter
+  const ringPctEl = document.getElementById('ringPct');
+  let currentPct = 0;
+  const targetPct = Math.round(pct * 10) / 10;
+  const pctInterval = setInterval(() => {
+    currentPct += 0.5;
+    if (currentPct >= targetPct) {
+      currentPct = targetPct;
+      clearInterval(pctInterval);
+    }
+    ringPctEl.textContent = Math.round(currentPct);
+  }, 20);
+
+  // Stats
+  document.getElementById('statRemaining').textContent = '$' + Math.round(remaining / 1000) + 'k';
+  document.getElementById('statPerWeek').textContent = '$' + (perWeek / 1000).toFixed(1) + 'k';
+  document.getElementById('statDaysLeft').textContent = daysLeft;
+
+  // Momentum
+  if (nextMilestone) {
+    document.getElementById('nextMilestoneLabel').textContent = nextMilestone.label;
+    document.getElementById('nextMilestoneGap').textContent = '$' + toNextMilestone.toLocaleString();
+  }
+
+  // Milestones list
+  const milestoneListEl = document.getElementById('milestoneList');
+  CONFIG.milestones.forEach(m => {
+    const earned = CONFIG.totalLocked >= m.amount;
+    const isNext = !earned && nextMilestone && m.amount === nextMilestone.amount;
+
+    const row = document.createElement('div');
+    row.style.cssText = 'display: flex; align-items: center; gap: 10px; padding: 6px 0;';
+
+    const icon = document.createElement('span');
+    icon.style.cssText = 'font-size: 16px; width: 24px; text-align: center;';
+    icon.textContent = earned ? '✅' : m.icon;
+
+    const label = document.createElement('span');
+    label.style.cssText = `font-size: 12px; font-weight: 600; flex: 1; color: ${earned ? 'var(--green)' : isNext ? 'var(--gold)' : 'var(--text-muted)'};`;
+    label.textContent = m.label;
+
+    const reward = document.createElement('span');
+    reward.style.cssText = `font-size: 10px; font-weight: 500; color: ${earned ? 'var(--green)' : 'var(--text-muted)'};`;
+    reward.textContent = earned ? '✓ ' + m.reward : m.reward;
+
+    if (isNext) {
+      const gap = document.createElement('span');
+      gap.style.cssText = 'font-size: 10px; font-weight: 700; color: var(--gold);';
+      gap.textContent = '$' + (m.amount - CONFIG.totalLocked).toLocaleString() + ' away';
+      row.appendChild(icon);
+      row.appendChild(label);
+      row.appendChild(gap);
+    } else {
+      row.appendChild(icon);
+      row.appendChild(label);
+      row.appendChild(reward);
+    }
+
+    milestoneListEl.appendChild(row);
+  });
+
+  // Footer date
+  document.getElementById('footerDate').textContent = CONFIG.lastUpdated;
+</script>
+
+</body>
+</html>
