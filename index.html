@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Bloom OS — Quarter Tracker</title>
+<title>Bloom OS â Quarter Tracker</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -409,7 +409,7 @@
   }
 
   .q-card.active {
-    animation: pulse-gold 3s ease-in-out infinite;
+    animation: fadeInUp 0.6s ease-out forwards, pulse-gold 3s ease-in-out 0.6s infinite;
   }
 
   /* Number count-up animation */
@@ -455,42 +455,42 @@
     quarters: [
       {
         label: 'Q1',
-        subtitle: 'Jan — Mar',
+        subtitle: 'Jan â Mar',
         target: 238654,
         get current() { return CONFIG.q1Baseline; },
         status: 'complete'
       },
       {
         label: 'Q2',
-        subtitle: 'Apr — Jun',
+        subtitle: 'Apr â Jun',
         target: 70000,
         get current() { return CONFIG.q2New; },
         status: 'active'
       },
       {
         label: 'Q3',
-        subtitle: 'Jul — Sep',
+        subtitle: 'Jul â Sep',
         target: 70000,
         get current() { return CONFIG.q3New; },
         status: 'locked'
       },
       {
         label: 'Q4',
-        subtitle: 'Oct — Dec',
+        subtitle: 'Oct â Dec',
         target: 71346,          // $450k - $238,654 - $70k - $70k
         get current() { return CONFIG.q4New; },
         status: 'locked'
       }
     ],
 
-    // Milestones — hit these cumulative totals to "unlock"
+    // Milestones â hit these cumulative totals to "unlock"
     milestones: [
-      { amount: 275000, label: '$275k', icon: '🔥', reward: 'On pace' },
-      { amount: 300000, label: '$300k', icon: '⚡', reward: '2/3 mark' },
-      { amount: 350000, label: '$350k', icon: '🏔', reward: 'Matched 2025' },
-      { amount: 400000, label: '$400k', icon: '🚀', reward: 'New record' },
-      { amount: 425000, label: '$425k', icon: '👑', reward: 'Almost there' },
-      { amount: 450000, label: '$450k', icon: '🏆', reward: 'TARGET HIT' },
+      { amount: 275000, label: '$275k', icon: 'ð¥', reward: 'On pace' },
+      { amount: 300000, label: '$300k', icon: 'â¡', reward: '2/3 mark' },
+      { amount: 350000, label: '$350k', icon: 'ð', reward: 'Matched 2025' },
+      { amount: 400000, label: '$400k', icon: 'ð', reward: 'New record' },
+      { amount: 425000, label: '$425k', icon: 'ð', reward: 'Almost there' },
+      { amount: 450000, label: '$450k', icon: 'ð', reward: 'TARGET HIT' },
     ],
 
     bookingStreak: 4,
@@ -572,11 +572,11 @@
 
 <!-- Momentum -->
 <div class="momentum animate-in delay-3">
-  <div class="momentum-flame" id="momentumIcon">🔥</div>
+  <div class="momentum-flame" id="momentumIcon">ð¥</div>
   <div class="momentum-text">
     <div class="momentum-title" id="momentumTitle">4-month booking streak</div>
     <div class="momentum-sub" id="momentumSub">
-      Next milestone: <strong id="nextMilestoneLabel">$275k</strong> — <strong id="nextMilestoneGap">$21,778</strong> away
+      Next milestone: <strong id="nextMilestoneLabel">$275k</strong> â <strong id="nextMilestoneGap">$21,778</strong> away
     </div>
   </div>
 </div>
@@ -589,9 +589,9 @@
     <div class="q-head">
       <div>
         <span class="q-label complete">Q1</span>
-        <span style="font-size: 10px; color: var(--text-muted); margin-left: 8px; font-weight: 500;">Jan — Mar</span>
+        <span style="font-size: 10px; color: var(--text-muted); margin-left: 8px; font-weight: 500;">Jan â Mar</span>
       </div>
-      <span class="q-status complete">✓ Complete</span>
+      <span class="q-status complete">â Complete</span>
     </div>
     <div class="q-numbers">
       <div class="q-current">$238,654</div>
@@ -601,17 +601,17 @@
       <div class="q-bar-fill complete" style="width: 100%"></div>
     </div>
     <div class="q-milestones">
-      <div class="milestone earned"><span class="milestone-icon">✓</span> Foundation set</div>
-      <div class="milestone earned"><span class="milestone-icon">✓</span> 37 weddings booked</div>
+      <div class="milestone earned"><span class="milestone-icon">â</span> Foundation set</div>
+      <div class="milestone earned"><span class="milestone-icon">â</span> 37 weddings booked</div>
     </div>
   </div>
 
   <!-- Q2 -->
-  <div class="q-card active animate-in delay-4">
+  <div class="q-card active delay-4">
     <div class="q-head">
       <div>
         <span class="q-label active">Q2</span>
-        <span style="font-size: 10px; color: var(--text-muted); margin-left: 8px; font-weight: 500;">Apr — Jun</span>
+        <span style="font-size: 10px; color: var(--text-muted); margin-left: 8px; font-weight: 500;">Apr â Jun</span>
       </div>
       <span class="q-status active">In Progress</span>
     </div>
@@ -623,12 +623,12 @@
       <div class="q-bar-fill active" style="width: 20.8%" id="q2Bar"></div>
     </div>
     <div class="q-milestones">
-      <div class="milestone earned"><span class="milestone-icon">✓</span> Ellen & Alex booked</div>
-      <div class="milestone earned"><span class="milestone-icon">✓</span> Katie & Flacky booked</div>
-      <div class="milestone earned"><span class="milestone-icon">✓</span> TIGS confirmed</div>
-      <div class="milestone next"><span class="milestone-icon">◎</span> $20k — Quick start</div>
-      <div class="milestone future"><span class="milestone-icon">○</span> $40k — Halfway</div>
-      <div class="milestone future"><span class="milestone-icon">○</span> $70k — Quarter crushed</div>
+      <div class="milestone earned"><span class="milestone-icon">â</span> Ellen & Alex booked</div>
+      <div class="milestone earned"><span class="milestone-icon">â</span> Katie & Flacky booked</div>
+      <div class="milestone earned"><span class="milestone-icon">â</span> TIGS confirmed</div>
+      <div class="milestone next"><span class="milestone-icon">â</span> $20k â Quick start</div>
+      <div class="milestone future"><span class="milestone-icon">â</span> $40k â Halfway</div>
+      <div class="milestone future"><span class="milestone-icon">â</span> $70k â Quarter crushed</div>
     </div>
   </div>
 
@@ -637,13 +637,13 @@
     <div class="q-head">
       <div>
         <span class="q-label locked">Q3</span>
-        <span style="font-size: 10px; color: var(--text-muted); margin-left: 8px; font-weight: 500;">Jul — Sep</span>
+        <span style="font-size: 10px; color: var(--text-muted); margin-left: 8px; font-weight: 500;">Jul â Sep</span>
       </div>
       <span class="q-status locked">Locked</span>
     </div>
     <div class="q-numbers">
       <div class="q-current" style="color: var(--text-muted);">$0</div>
-      <div class="q-target">$70,000 target — winter quarter</div>
+      <div class="q-target">$70,000 target â winter quarter</div>
     </div>
     <div class="q-bar-track">
       <div class="q-bar-fill" style="width: 0%; background: var(--text-muted);"></div>
@@ -655,13 +655,13 @@
     <div class="q-head">
       <div>
         <span class="q-label locked">Q4</span>
-        <span style="font-size: 10px; color: var(--text-muted); margin-left: 8px; font-weight: 500;">Oct — Dec</span>
+        <span style="font-size: 10px; color: var(--text-muted); margin-left: 8px; font-weight: 500;">Oct â Dec</span>
       </div>
       <span class="q-status locked">Locked</span>
     </div>
     <div class="q-numbers">
       <div class="q-current" style="color: var(--text-muted);">$0</div>
-      <div class="q-target">$71,346 target — finish line</div>
+      <div class="q-target">$71,346 target â finish line</div>
     </div>
     <div class="q-bar-track">
       <div class="q-bar-fill" style="width: 0%; background: var(--text-muted);"></div>
@@ -730,7 +730,7 @@
 
     const icon = document.createElement('span');
     icon.style.cssText = 'font-size: 16px; width: 24px; text-align: center;';
-    icon.textContent = earned ? '✅' : m.icon;
+    icon.textContent = earned ? 'â' : m.icon;
 
     const label = document.createElement('span');
     label.style.cssText = `font-size: 12px; font-weight: 600; flex: 1; color: ${earned ? 'var(--green)' : isNext ? 'var(--gold)' : 'var(--text-muted)'};`;
@@ -738,7 +738,7 @@
 
     const reward = document.createElement('span');
     reward.style.cssText = `font-size: 10px; font-weight: 500; color: ${earned ? 'var(--green)' : 'var(--text-muted)'};`;
-    reward.textContent = earned ? '✓ ' + m.reward : m.reward;
+    reward.textContent = earned ? 'â ' + m.reward : m.reward;
 
     if (isNext) {
       const gap = document.createElement('span');
