@@ -594,28 +594,6 @@
 <!-- Quarter cards -->
 <div class="quarters" style="margin-top: 16px;">
 
-  <!-- Q1 -->
-  <div class="q-card complete animate-in delay-4">
-    <div class="q-head">
-      <div>
-        <span class="q-label complete">Q1</span>
-        <span style="font-size: 10px; color: var(--text-muted); margin-left: 8px; font-weight: 500;">Jan  &#8212;Mar</span>
-      </div>
-      <span class="q-status complete">&#10003; Complete</span>
-    </div>
-    <div class="q-numbers">
-      <div class="q-current">$238,654</div>
-      <div class="q-target">baseline locked before April</div>
-    </div>
-    <div class="q-bar-track">
-      <div class="q-bar-fill complete" style="width: 100%"></div>
-    </div>
-    <div class="q-milestones">
-      <div class="milestone earned"><span class="milestone-icon">&#10003;</span> Foundation set</div>
-      <div class="milestone earned"><span class="milestone-icon">&#10003;</span> 37 weddings booked</div>
-    </div>
-  </div>
-
   <!-- Q2 -->
   <div class="q-card active delay-4">
     <div class="q-head">
@@ -686,19 +664,35 @@
     </div>
     <div class="q-bar-track">
       <div class="q-bar-fill" style="width: 0%; background: var(--text-muted);"></div>
+
+  <!-- Q1 (previous) -->
+  <div class="q-card complete animate-in delay-4">
+    <div class="q-head">
+      <div>
+        <span class="q-label complete">Q1</span>
+        <span style="font-size: 10px; color: var(--text-muted); margin-left: 8px; font-weight: 500;">Jan  &#8212;Mar</span>
+      </div>
+      <span class="q-status complete">&#10003; Complete</span>
+    </div>
+    <div class="q-numbers">
+      <div class="q-current">$238,654</div>
+      <div class="q-target">baseline locked before April</div>
+    </div>
+    <div class="q-bar-track">
+      <div class="q-bar-fill complete" style="width: 100%"></div>
+    </div>
+    <div class="q-milestones">
+      <div class="milestone earned"><span class="milestone-icon">&#10003;</span> Foundation set</div>
+      <div class="milestone earned"><span class="milestone-icon">&#10003;</span> 37 weddings booked</div>
+    </div>
+  </div>
+
+
     </div>
   </div>
 
 </div>
 
-<!-- Annual milestones -->
-<div style="margin: 20px 16px 0;">
-  <div style="background: var(--card); border: 1px solid var(--card-border); border-radius: 12px; padding: 16px 18px;">
-    <div style="font-size: 9px; color: var(--gold); font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 14px;">Annual Milestones</div>
-    <div style="display: flex; flex-direction: column; gap: 8px;" id="milestoneList">
-    </div>
-  </div>
-</div>
 
 <div class="footer">
   <div class="footer-updated">Last updated: <span id="footerDate">15 April 2026</span></div>
@@ -739,43 +733,6 @@
     document.getElementById('nextMilestoneLabel').textContent = nextMilestone.label;
     document.getElementById('nextMilestoneGap').textContent = '$' + toNextMilestone.toLocaleString();
   }
-
-  // Milestones list
-  const milestoneListEl = document.getElementById('milestoneList');
-  CONFIG.milestones.forEach(m => {
-    const earned = CONFIG.totalLocked >= m.amount;
-    const isNext = !earned && nextMilestone && m.amount === nextMilestone.amount;
-
-    const row = document.createElement('div');
-    row.style.cssText = 'display: flex; align-items: center; gap: 10px; padding: 6px 0;';
-
-    const icon = document.createElement('span');
-    icon.style.cssText = 'font-size: 16px; width: 24px; text-align: center;';
-    icon.textContent = earned ? '&#9989;' : m.icon;
-
-    const label = document.createElement('span');
-    label.style.cssText = `font-size: 12px; font-weight: 600; flex: 1; color: ${earned ? 'var(--green)' : isNext ? 'var(--gold)' : 'var(--text-muted)'};`;
-    label.textContent = m.label;
-
-    const reward = document.createElement('span');
-    reward.style.cssText = `font-size: 10px; font-weight: 500; color: ${earned ? 'var(--green)' : 'var(--text-muted)'};`;
-    reward.textContent = earned ? '&#10003; ' + m.reward : m.reward;
-
-    if (isNext) {
-      const gap = document.createElement('span');
-      gap.style.cssText = 'font-size: 10px; font-weight: 700; color: var(--gold);';
-      gap.textContent = '$' + (m.amount - CONFIG.totalLocked).toLocaleString() + ' away';
-      row.appendChild(icon);
-      row.appendChild(label);
-      row.appendChild(gap);
-    } else {
-      row.appendChild(icon);
-      row.appendChild(label);
-      row.appendChild(reward);
-    }
-
-    milestoneListEl.appendChild(row);
-  });
 
   // Q2 ring animation
   const q2RingEl = document.getElementById('q2RingFill');
