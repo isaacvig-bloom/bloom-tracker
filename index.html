@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -594,7 +594,7 @@
 <!-- Quarter cards -->
 <div class="quarters" style="margin-top: 16px;">
 
-  <!-- Q2 -->
+  <!-- Q2 (current) -->
   <div class="q-card active delay-4">
     <div class="q-head">
       <div>
@@ -664,6 +664,8 @@
     </div>
     <div class="q-bar-track">
       <div class="q-bar-fill" style="width: 0%; background: var(--text-muted);"></div>
+    </div>
+  </div>
 
   <!-- Q1 (previous) -->
   <div class="q-card complete animate-in delay-4">
@@ -687,12 +689,7 @@
     </div>
   </div>
 
-
-    </div>
-  </div>
-
 </div>
-
 
 <div class="footer">
   <div class="footer-updated">Last updated: <span id="footerDate">15 April 2026</span></div>
@@ -734,27 +731,10 @@
     document.getElementById('nextMilestoneGap').textContent = '$' + toNextMilestone.toLocaleString();
   }
 
-  
-  // Dynamic Q2 and hero values
-  document.getElementById('q2Current').textContent = '
-  const q2RingEl = document.getElementById('q2RingFill');
-  if (q2RingEl) {
-    const q2Circ = 2 * Math.PI * 25;
-    const q2Pct = Math.min(100, (CONFIG.q2New / 70000) * 100);
-    const q2Offset = q2Circ - (q2Pct / 100) * q2Circ;
-    q2RingEl.style.strokeDashoffset = q2Circ;
-    setTimeout(() => { q2RingEl.style.strokeDashoffset = q2Offset; }, 500);
-    document.getElementById('q2RingPct').textContent = Math.round(q2Pct);
-  }
-
-  // Footer date
-  document.getElementById('footerDate').textContent = CONFIG.lastUpdated;
-</script>
-
-</body>
-</html>
- + CONFIG.q2New.toLocaleString();
+  // Dynamic values from CONFIG
+  document.getElementById('q2Current').textContent = '$' + CONFIG.q2New.toLocaleString();
   document.getElementById('heroAmount').textContent = CONFIG.totalLocked.toLocaleString();
+
   // Q2 ring animation
   const q2RingEl = document.getElementById('q2RingFill');
   if (q2RingEl) {
